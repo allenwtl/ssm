@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+输入的userName:
+<input id="userName" type="text">
+
+<button id="button">确认</button>
+<script type="text/javascript">
+    $(function(){
+        var html ="<table>";
+        $.ajax({
+            url:'/index?p=queryAll',
+            dataType:'json',
+            success:function(data){
+                $(data).each(function(){
+                    var $this = $(this);
+                    html = html +"<tr><td>"+$this.id+"</td><td>"+$this.userName+"</td><td>"+$this.course+"</td>"+"</td><td>"+$this.score+"</td></tr>";
+                });
+                html = html +"</table>";
+                $("body").append(html);
+            }
+        });
+
+    });
+
+    $('#button').on("click", function(){
+        var userName = $('#userName').val();
+        $.ajax({
+            method:'GET',
+            url:'/index?p=updateUserName&userName='+userName,
+            success:function(data){
+                alert(data);
+            },
+            error:function(){
+                console.info('error')
+            }
+        });
+    });
+
+</script>
+</body>
+</html>
