@@ -75,6 +75,7 @@
             <version>3.1.0</version>
         </dependency>
 
+<<<<<<< HEAD
         <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -95,6 +96,8 @@
             <version>1.2.20</version>
         </dependency>
 
+=======
+>>>>>>> remotes/origin/master
 
     </dependencies>
 

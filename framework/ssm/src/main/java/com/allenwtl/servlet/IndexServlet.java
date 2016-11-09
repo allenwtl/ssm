@@ -57,6 +57,7 @@ public class IndexServlet extends HttpServlet{
         String sql = "SchoolMapper.select";
         Map<String,Object> params = new HashMap<>();
         params.put("id", index);
+
         List<School> schoolList = sqlSession.selectList(sql, params);
         resp.getOutputStream().println(schoolList.size());
 
