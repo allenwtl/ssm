@@ -33,4 +33,9 @@ public class UUIDUtils {
 		return RandomStringUtils.random(8, true, false);
 	}
 
+
+	public static void main(String[] args) {
+		System.out.println(getUuidStr());
+	}
+
 }
