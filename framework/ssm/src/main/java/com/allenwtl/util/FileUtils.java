@@ -1,10 +1,6 @@
 package com.allenwtl.util;
 
-import cn.gfurox.common.MessageException;
-import cn.gfurox.utils.dataformat.StringUtil;
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.geometry.Positions;
-import org.apache.commons.fileupload.FileItem;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +24,6 @@ public class FileUtils {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
-    private static String FILE_UPLOAD_PATH = SystemConfig.system_uploadfile;
 
 
     /**
@@ -37,28 +32,29 @@ public class FileUtils {
      * @return
      */
     public static String getFileExt(String fileName) {
-        if (StringUtil.isEmpty(fileName)) {
-            throw new MessageException("文件名不能为空");
+        if (StringUtils.isEmpty(fileName)) {
+            //todo
+
         }
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
 
-    public static String uploadFile(FileItem fileItem, String relativeDirectory) {
-        String filename = UUIDUtils.getUuidStr() + "." + getFileExt(fileItem.getName());
-        filename = filename.substring(filename.lastIndexOf("\\") + 1);
-        String relativeFilePath = relativeDirectory + "/" + filename;
-        logger.info("relativeFilePath:{}", relativeFilePath);
-        File file = new File(FILE_UPLOAD_PATH + relativeFilePath);
-        try {
-            fileItem.write(file);
-        } catch (Exception e) {
-            logger.error("保存图片失败:{}", e.getMessage());
-            throw new MessageException(e.getMessage());
-        }
-
-        return relativeFilePath;
-    }
+//    public static String uploadFile(FileItem fileItem, String relativeDirectory) {
+//        String filename = UUIDUtils.getUuidStr() + "." + getFileExt(fileItem.getName());
+//        filename = filename.substring(filename.lastIndexOf("\\") + 1);
+//        String relativeFilePath = relativeDirectory + "/" + filename;
+//        logger.info("relativeFilePath:{}", relativeFilePath);
+//        File file = new File(FILE_UPLOAD_PATH + relativeFilePath);
+//        try {
+//            fileItem.write(file);
+//        } catch (Exception e) {
+//            logger.error("保存图片失败:{}", e.getMessage());
+//            throw new MessageException(e.getMessage());
+//        }
+//
+//        return relativeFilePath;
+//    }
 
     /**
      * 获取相对的路径
@@ -88,39 +84,39 @@ public class FileUtils {
      * @param relativeDirectory 缩略图存放的相对路径
      * @return
      */
-    public static String getThumbnailsWidthAndHeight(String imageStyle, String filePathPrefix , String relativeFilePath, String relativeDirectory) {
-        logger.info("imageStyle:[{}], filePathPrefix:[{}],relativeFilePath:[{}], relativeDirectory:[{}]", new Object[]{imageStyle, filePathPrefix, relativeFilePath, relativeDirectory});
-        String oldImageAbsolutelyFilePath = filePathPrefix + relativeFilePath ;
-        String[] arrays = imageStyle.split("-");
-        Integer width = Integer.parseInt(arrays[0]);
-        Integer height = Integer.parseInt(arrays[1]);
-        String fileName = UUIDUtils.getUuidStr();
-        String resultFilePath = "";
-        try {
-            resultFilePath = relativeDirectory + "/" + fileName + "." + getFileExt(oldImageAbsolutelyFilePath);
-
-            File file = new File(oldImageAbsolutelyFilePath);
-            Thumbnails.Builder<File> builderBuf = Thumbnails.of(file);
-            BufferedImage image = ImageIO.read(file);
-            if (image.getHeight() > image.getWidth()) {
-                builderBuf.width(width);
-            } else {
-                builderBuf.height(height);
-            }
-
-            builderBuf.outputQuality(0.9); //参数是浮点数，0-1之间
-            builderBuf.keepAspectRatio(true);  //默认为true，如果要剪裁到特定的比例，设为false即可
-            image = builderBuf.asBufferedImage();
-
-            Thumbnails.Builder<BufferedImage> builder = Thumbnails.of(image);
-            builder.sourceRegion(Positions.CENTER, width, height);
-            builder.size(width, height);
-            builder.toFile(filePathPrefix + resultFilePath);
-        } catch (IOException e) {
-            logger.error("生成缩略图失败:{}", e);
-        }
-        return resultFilePath;
-    }
+//    public static String getThumbnailsWidthAndHeight(String imageStyle, String filePathPrefix , String relativeFilePath, String relativeDirectory) {
+//        logger.info("imageStyle:[{}], filePathPrefix:[{}],relativeFilePath:[{}], relativeDirectory:[{}]", new Object[]{imageStyle, filePathPrefix, relativeFilePath, relativeDirectory});
+//        String oldImageAbsolutelyFilePath = filePathPrefix + relativeFilePath ;
+//        String[] arrays = imageStyle.split("-");
+//        Integer width = Integer.parseInt(arrays[0]);
+//        Integer height = Integer.parseInt(arrays[1]);
+//        String fileName = UUIDUtils.getUuidStr();
+//        String resultFilePath = "";
+//        try {
+//            resultFilePath = relativeDirectory + "/" + fileName + "." + getFileExt(oldImageAbsolutelyFilePath);
+//
+//            File file = new File(oldImageAbsolutelyFilePath);
+//            Thumbnails.Builder<File> builderBuf = Thumbnails.of(file);
+//            BufferedImage image = ImageIO.read(file);
+//            if (image.getHeight() > image.getWidth()) {
+//                builderBuf.width(width);
+//            } else {
+//                builderBuf.height(height);
+//            }
+//
+//            builderBuf.outputQuality(0.9); //参数是浮点数，0-1之间
+//            builderBuf.keepAspectRatio(true);  //默认为true，如果要剪裁到特定的比例，设为false即可
+//            image = builderBuf.asBufferedImage();
+//
+//            Thumbnails.Builder<BufferedImage> builder = Thumbnails.of(image);
+//            builder.sourceRegion(Positions.CENTER, width, height);
+//            builder.size(width, height);
+//            builder.toFile(filePathPrefix + resultFilePath);
+//        } catch (IOException e) {
+//            logger.error("生成缩略图失败:{}", e);
+//        }
+//        return resultFilePath;
+//    }
 
     /**
      * 只按等比例缩小
@@ -130,35 +126,35 @@ public class FileUtils {
      * @param relativeDirectory
      * @return
      */
-    public static String getThumbnailsAspectRatio(String imageStyle, String filePathPrefix , String relativeFilePath, String relativeDirectory) {
-        String oldImageAbsolutelyFilePath = filePathPrefix + relativeFilePath ;
-        String[] arrays = imageStyle.split("-");
-        Integer width = Integer.parseInt(arrays[0]);
-        Integer height = Integer.parseInt(arrays[1]);
-        String fileName = UUIDUtils.getUuidStr();
-        String resultFilePath = "";
-        try {
-            resultFilePath = relativeDirectory + "/" + fileName + "." + getFileExt(oldImageAbsolutelyFilePath);
-
-            File file = new File(oldImageAbsolutelyFilePath);
-            Thumbnails.Builder<File> builderBuf = Thumbnails.of(file);
-            BufferedImage image = ImageIO.read(file);
-            if (image.getHeight() > image.getWidth()) {
-                builderBuf.width(width);
-            } else {
-                builderBuf.height(height);
-            }
-
-
-            builderBuf.outputQuality(0.8); //参数是浮点数，0-1之间
-            builderBuf.keepAspectRatio(true);  //默认为true，如果要剪裁到特定的比例，设为false即可
-
-            builderBuf.toFile(filePathPrefix + resultFilePath);
-        } catch (IOException e) {
-            logger.error("生成缩略图失败:{}", e);
-        }
-        return resultFilePath;
-    }
+//    public static String getThumbnailsAspectRatio(String imageStyle, String filePathPrefix , String relativeFilePath, String relativeDirectory) {
+//        String oldImageAbsolutelyFilePath = filePathPrefix + relativeFilePath ;
+//        String[] arrays = imageStyle.split("-");
+//        Integer width = Integer.parseInt(arrays[0]);
+//        Integer height = Integer.parseInt(arrays[1]);
+//        String fileName = UUIDUtils.getUuidStr();
+//        String resultFilePath = "";
+//        try {
+//            resultFilePath = relativeDirectory + "/" + fileName + "." + getFileExt(oldImageAbsolutelyFilePath);
+//
+//            File file = new File(oldImageAbsolutelyFilePath);
+//            Thumbnails.Builder<File> builderBuf = Thumbnails.of(file);
+//            BufferedImage image = ImageIO.read(file);
+//            if (image.getHeight() > image.getWidth()) {
+//                builderBuf.width(width);
+//            } else {
+//                builderBuf.height(height);
+//            }
+//
+//
+//            builderBuf.outputQuality(0.8); //参数是浮点数，0-1之间
+//            builderBuf.keepAspectRatio(true);  //默认为true，如果要剪裁到特定的比例，设为false即可
+//
+//            builderBuf.toFile(filePathPrefix + resultFilePath);
+//        } catch (IOException e) {
+//            logger.error("生成缩略图失败:{}", e);
+//        }
+//        return resultFilePath;
+//    }
 
 
 
@@ -241,14 +237,14 @@ public class FileUtils {
      * @param originalFilePath
      * @return
      */
-    public static String getFileName(FileItem fileItem, String originalFilePath){
-        String fileName = fileItem.getName();
-        if( StringUtils.isEmpty(fileName) ){
-            fileName = originalFilePath.substring(originalFilePath.lastIndexOf("/") + 1);
-        }
-        fileName = fileName.lastIndexOf("/") > -1 ?  fileName.substring(fileName.lastIndexOf("/") + 1): fileName;
-        return fileName ;
-    }
+//    public static String getFileName(FileItem fileItem, String originalFilePath){
+//        String fileName = fileItem.getName();
+//        if( StringUtils.isEmpty(fileName) ){
+//            fileName = originalFilePath.substring(originalFilePath.lastIndexOf("/") + 1);
+//        }
+//        fileName = fileName.lastIndexOf("/") > -1 ?  fileName.substring(fileName.lastIndexOf("/") + 1): fileName;
+//        return fileName ;
+//    }
 
     /**
      * 获取文件的名称
@@ -290,7 +286,7 @@ public class FileUtils {
         String filePathName = "C:\\Users\\Administrator\\Desktop\\老师\\IMG_20151122_093415.jpg";
 
         String relativeDirectory = getRelativeDirectory( "C:\\Users\\Administrator\\Desktop\\老师\\", "th");
-        getThumbnailsAspectRatio("500-500", "C:\\Users\\Administrator\\Desktop\\老师\\", "IMG_20151122_093415.jpg", relativeDirectory);
+        //getThumbnailsAspectRatio("500-500", "C:\\Users\\Administrator\\Desktop\\老师\\", "IMG_20151122_093415.jpg", relativeDirectory);
 
 
 
