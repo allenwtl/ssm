@@ -83,7 +83,7 @@ public class DataPage<T> implements Serializable {
 
             for(int index = 0; index < orderLength; ++index) {
                 String orderStr = orderArray[index];
-                if(!StringUtils.equals("desc", orderStr) && !StringUtils.equals("asc", orderStr)) {
+                if(!StringUtils.equals( DESC, orderStr) && !StringUtils.equals( ASC , orderStr)) {
                     throw new IllegalArgumentException("排序方向" + orderStr + "不是合法值");
                 }
             }
@@ -92,6 +92,19 @@ public class DataPage<T> implements Serializable {
         }
     }
 
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+
+    public DataPage<T> orderBy(String theOrderBy) {
+        this.setOrderBy(theOrderBy);
+        return this;
+    }
 
     public boolean isNeedData() {
         return needData;
