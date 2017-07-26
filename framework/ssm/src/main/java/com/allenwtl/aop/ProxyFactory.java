@@ -24,5 +24,4 @@ public class ProxyFactory {
             return targetObject;
         }
     }
-
 }

@@ -281,7 +281,7 @@ public class RSAUtil extends Coder{
 //		String decodedData = decryptByPublicKey(str);
 //		System.out.println("私钥加密 - 公钥解密 : " + decodedData);
 
-		String filePath = "";
+		String filePath = "D:\\text.txt";
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(filePath)));
 
 		StringBuilder stringBuilder = new StringBuilder();
@@ -290,7 +290,8 @@ public class RSAUtil extends Coder{
 			stringBuilder.append(temp+"\n");
 		}
 
-		String str = encryptByPublicKey(stringBuilder.toString());
+		//String str = encryptByPublicKey(stringBuilder.toString());
+		String str = stringBuilder.toString();
 		System.out.println(str);
 		System.out.println("---------------------------------------------------------");
 
